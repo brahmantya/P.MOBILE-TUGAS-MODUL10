@@ -1,0 +1,65 @@
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildTools
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        versionCode dbinspector.versionCode
+        versionName dbinspector.version
+    }
+
+    buildTypes {
+
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.txt"
+        }
+    }
+
+    resourcePrefix "dbinspector_"
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+        freeCompilerArgs += [
+            '-Xopt-in=org.koin.core.component.KoinApiExtension'
+        ]
+    }
+
+    sourceSets.each {
+        it.java.srcDirs += "src/$it.name/kotlin"
+    }
+
+    buildFeatures {
+        viewBinding true
+    }
+}
+
+dependencies {
+    implementation packages.kotlin.core
+    implementation packages.androidx.core
+    implementation packages.androidx.appcompat
+    implementation packages.androidx.fragment
+    implementation packages.androidx.lifecycle.common
+    implementation packages.androidx.recyclerview
+    implementation packages.androidx.viewpager
+    implementation packages.androidx.paging
+    implementation packages.androidx.startup
+    implementation packages.androidx.swiperefreshlayout
+    implementation packages.google.design
+    implementation packages.kotlinx.coroutines
+    implementation packages.koin.android
+    implementation packages.koin.scope
+    implementation packages.koin.viewmodel
+    implementation packages.timber.core
+}
+
+apply from: "bintray.gradle"
